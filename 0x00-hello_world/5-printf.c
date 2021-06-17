@@ -1,11 +1,13 @@
 #include <stdio.h>
+
 /**
- *main - primary function serves as starting point of the program
- *Return: 0 upon the reaching the end of the program
+ * main - Entry point
+ *
+ * Return: Always 0 (Success)
  */
+
 int main(void)
 {
-  char str[] = "\"Programming is like building a multilingual puzzle";
-  printf(str);
+  printf("%s", "with proper grammar, but the outcome is a piece of art,\n");
   return (0);
 }
