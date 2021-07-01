@@ -10,18 +10,20 @@
 
 char *rot13(char *str)
 {
+char *c = str;
 int i = 0, j;
 char s[] =  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 char s1[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
 for (; str[i] != '\0'; i++)
 {
-for (j = 0; j <= 51; j++)
+for (j = 0; j <= 52; j++)
 {
 if (s[j] == str[i])
 {
 str[i] = s1[j];
+break;
 }
 }
 }
-return (str);
+return (c);
 }
