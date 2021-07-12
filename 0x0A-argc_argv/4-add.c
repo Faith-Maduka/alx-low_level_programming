@@ -1,28 +1,44 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 /**
- * main - adds all positive numbers and prints it
- * @argc: argument count
- * @argv: argument vector
- * Return: 0 for success
+ * isInteger - checks if s is an integer
+ * @s: string to check
+ * Return: 0 or 1
  */
 
-int main(int argc, char *argv[])
+int isInteger(const char *s)
 {
-int i, res;
-res = 0;
-for (i = 0; i < argc; i++)
+int i = 0;
+while (s[i] != '\0')
 {
-if (i > 0)
-{
-if (atoi(argv[i]) == 0)
-{
-return (printf("Error\n"), 1);
+if (s[i] < '0' || s[i] > '9')
+return (1);
+i++;
 }
-res += atoi(argv[i]);
+return (0);
 }
+
+/**
+ * main - adds positive numbers
+ * @argc: int
+ * @argv: list
+ * Return: 0
+ */
+
+int main(int argc, char const *argv[])
+{
+int sum = 0;
+while (--argc)
+{
+if (isInteger(argv[argc]))
+{
+printf("Error\n");
+return (1);
 }
-printf("%d\n", res);
+sum += atoi(argv[argc]);
+}
+
+printf("%i\n", sum);
+
 return (0);
 }
