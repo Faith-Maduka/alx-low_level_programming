@@ -1,63 +1,57 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 /**
- * calculate_cents - calculates and return cents
- * @num: input params
- * Return: coins
+ * isInteger - checks if s is an integer
+ * @s: string to check
+ * Return: 0 or 1
  */
 
-int calculate_cents(int num)
+int isInteger(const char *s)
 {
-int coins = 0;
-while (num)
+int i = 0;
+while (s[i] != '\0')
 {
-if (num >= 25)
-{
-num -= 25;
+if (s[i] < '0' || s[i] > '9')
+return (0);
+i++;
 }
-else if (num >= 10)
-{
-num -= 10;
-}
-else if (num >= 5)
-{
-num -= 5;
-}
-else if (num >= 2)
-{
-num -= 2;
-}
-else if (num >= 1)
-{
-num -= 1;
-}
-coins++;
-}
-return (coins);
+return (1);
 }
 
 /**
- * main - prints the minimum number of
- * coins to make change for an amount of money
- * @argc: amount of arguement
- * @argv: an array of inputs from argc
- *
- * Return: 0 for success
+ * main - adds positive numbers
+ * @argc: int
+ * @argv: list
+ * Return: 0
  */
 
-int main(int argc, char *argv[])
+int main(int argc, char const *argv[])
 {
-int number;
+int i = 0, coinUsed = 0, coin = 0;
+int coins[] = {25, 10, 5, 2, 1};
 if (argc != 2)
 {
-return (printf("Error\n"), 1);
+printf("Error\n");
+return (1);
 }
-number = atoi(argv[1]);
-if (number < 0)
+if (isInteger(argv[1]))
 {
-return (printf("Error\n"), 1);
+i = atoi(argv[1]);
+while (i > 0 && coin <= 4)
+{
+if (i >= coins[coin])
+{
+i -= coins[coin];
+coinUsed++;
 }
-printf("%d\n", calculate_cents(number));
+else
+{
+coin++;
+}
+}
+}
+
+printf("%i\n", coinUsed);
+
 return (0);
 }
