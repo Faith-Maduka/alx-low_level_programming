@@ -1,44 +1,55 @@
-#include <stdlib.h>
 #include "holberton.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 /**
- * *argstostr - concatenates all the arguments of the program
- * @ac: number of arguments
- * @av: array of arguments
+ * argstostr - concatenates all the arguments
+ * @ac: input params
+ * @av: input params
  *
- * Return: Pointer to the new string (Success), NULL (Error)
+ * Return: nothing.
  */
+
 char *argstostr(int ac, char **av)
 {
-int i, j, k, len;
+int x, j, v = 0;
+int len = 1;
 char *str;
 
 if (ac == 0 || av == NULL)
+{
 return (NULL);
-for (i = 0; i < ac; i++)
-{
-for (j = 0; av[i][j] != '\0'; j++)
-len++;
-len++;
 }
 
-str = malloc(sizeof(char) * (len + 1));
-
-if (str == NULL)
-return (NULL);
-
-k = 0;
-
-for (i = 0; i < ac; i++)
+for (x = 0; x < ac; x++)
 {
-for (j = 0; av[i][j] != '\0'; j++)
+for (j = 0; av[x][j] != '\0'; j++)
 {
-str[k] = av[i][j];
-k++;
+len += 1;
 }
-str[k] = '\n';
-k++;
+len += 1;
 }
+str = malloc(sizeof(char) * len);
 
+for (x = 0; x < ac; x++)
+{
+for (j = 0; av[x][j] != '\0'; j++)
+{
+str[v] = av[x][j];
+v++;
+}
+str[v] = '\n';
+v++;
+}
+str[v] = '\0';
+
+if (str != NULL)
+{
 return (str);
+}
+else
+{
+return (NULL);
+}
 }
