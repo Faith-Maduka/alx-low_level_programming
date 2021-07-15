@@ -1,57 +1,40 @@
 #include "holberton.h"
+#include <stdlib.h>
 
 /**
- * _memcpy - copy memory data from src to dest
- * @dest: memory destination
- * @src: memory source
- * @n: size of new memory
+ * _realloc - reallocates a memory block using malloc and free.
+ * @ptr: pointer to previously allocated memory
+ * @old_size: size of allocated space for ptr
+ * @new_size: size of newly allocated space
+ *
+ * Return: pointer to newly allocated memory, or NULL if failure
  */
-void _memcpy(void *dest, void *src, size_t n)
-{
-size_t i;
-char *csrc = (char *)src;
-char *cdest = (char *)dest;
-
-for (i = 0; i < n; i++)
-cdest[i] = csrc[i];
-}
-
-/**
- * *_realloc - reallocates a memory block using malloc and free
- * @ptr: array length
- * @old_size: size of old memory
- * @new_size: size of new memory
- * Return: pointer to new memory
- */
-
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 {
+char *p;
+unsigned int i, max = new_size;
+char *oldp = ptr;
 
-void *newPtr;
-if (new_size == 0)
+if (ptr == NULL)
 {
-if (ptr != NULL)
+p = malloc(new_size);
+return (p);
+}
+else if (new_size == 0)
+{
 free(ptr);
 return (NULL);
 }
-else if (!ptr)
-{
-return (malloc(new_size));
-}
-else if (new_size <= old_size)
-{
+else if (new_size == old_size)
 return (ptr);
-}
-else
-{
-newPtr = malloc(new_size);
-if (newPtr)
-{
-_memcpy(newPtr, ptr, old_size);
-free(ptr);
-}
-return (newPtr);
-}
 
-return (0);
+p = malloc(new_size);
+if (p == NULL)
+return (NULL);
+if (new_size > old_size)
+max = old_size;
+for (i = 0; i < max; i++)
+p[i] = oldp[i];
+free(ptr);
+return (p);
 }
