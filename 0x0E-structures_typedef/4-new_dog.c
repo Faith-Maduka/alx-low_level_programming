@@ -1,76 +1,82 @@
 #include "dog.h"
-#include <stdio.h>
-#include <stdlib.h>
+
 /**
- * new_dog - create new data structure for dog
+ * new_dog - creates a new dog
  * @name: name of dog
  * @age: age of dog
- * @owner: dog owner
- *
- * Return: Pointer to new dog
- **/
+ * @owner: owner of dog
+ * Return: malloced dog_t
+ */
+
 dog_t *new_dog(char *name, float age, char *owner)
 {
-dog_t *new_dog;
-int len_name, len_owner;
+char *n, *o;
+dog_t *new_dog = malloc(sizeof(dog_t));
 
-new_dog = malloc(sizeof(dog_t));
-if (new_dog == NULL)
-return (NULL);
-
-len_name = _strlen(name);
-new_dog->name = malloc(sizeof(char) * len_name + 1);
-if (new_dog->name == NULL)
+if (!new_dog || !name || !owner)
 {
-free(new_dog);
 return (NULL);
 }
-new_dog->name = _strcpy(new_dog->name, name);
-len_owner = _strlen(owner);
-new_dog->owner = malloc(sizeof(char) * len_owner + 1);
-if (new_dog->owner == NULL)
+n = malloc(_strlen(name) + 1);
+if (!n)
 {
-free(new_dog->name);
-free(new_dog);
-return (NULL);
+return (free(new_dog), NULL);
 }
-
-new_dog->owner = _strcpy(new_dog->owner, owner);
+n = _strdup(name);
+new_dog->name = n;
+o = malloc(_strlen(owner) + 1);
+if (!o)
+{
+return (free(new_dog->name), free(new_dog), NULL);
+}
+o = _strdup(owner);
+new_dog->owner = o;
 new_dog->age = age;
-
 return (new_dog);
 }
 
 /**
- * _strlen - determinates the lenght of a string
- * @s: pointer to string
- * Return: the length
+ * _strlen - returns the length of a string
+ * @s: string s
+ * Return: length of string
  */
+
 int _strlen(char *s)
 {
-int a;
-
-for (a = 0; s[a] != '\0'; a++)
-;
-return (a);
+char *p = s;
+while (*s)
+{
+s++;
+}
+return (s - p);
 }
 
 /**
- * _strcpy - copies a pointed string
- * @dest: pointer to the destine string
- * @src: pointer to the source string
- * Return: the adress of the destiny string
+ * _strdup - returns a pointer to a newly allocated space in memory,
+ * which contains a copy of the string given as a parameter.
+ * @str: string to be copied
+ * Return: copied string
  */
-char *_strcpy(char *dest, char *src)
-{
-int a = 0;
 
-while (src[a] != '\0')
+char *_strdup(char *str)
 {
-dest[a] = src[a];
-a++;
+int i, len;
+char *copy;
+
+if (!str)
+{
+return (NULL);
 }
-
-dest[a] = '\0';
-return (dest);
+len = _strlen(str);
+copy = malloc(sizeof(char) * len + 1);
+if (!copy)
+{
+return (NULL);
+}
+for (i = 0; i < len; i++)
+{
+copy[i] = str[i];
+}
+copy[i] = 0;
+return (copy);
 }
