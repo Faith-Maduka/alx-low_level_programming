@@ -9,20 +9,15 @@
 
 size_t print_list(const list_t *h)
 {
-register int len = 0;
+size_t nbr_nodes = 0;
+const list_t *current = h;
 
-while (h)
+while (current != NULL)
 {
-if (!(h->str))
-{
-printf("[0] (nil)\n");
+printf("[%d] %s\n", current->len,
+current->str != NULL ? current->str : "(nil)");
+current = current->next;
+nbr_nodes++;
 }
-else
-{
-printf("[%i] %s\n", h->len, h->str);
-}
-h = h->next;
-len++;
-}
-return (len);
+return (nbr_nodes);
 }
