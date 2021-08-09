@@ -7,43 +7,43 @@
  * Return: 0 if success
  */
 
-int main(int argc, char *argv[])
+int main(int ac, char *av[])
 {
-	int _file1, _file2, _read, c1, c2;
-	char buffer[1024];
+	int input_fd, output_fd, istatus, ostatus;
+	char buf[MAXSIZE];
+	mode_t mode;
 
-	if (argc != 3)
-	{
-		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n"), exit(97);
-	}
-	_file1 = open(argv[1], O_RDONLY);
-	if (_file1 < 0)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
-		exit(98);
-	}
-	_file2 = open(argv[2], O_TRUNC | O_CREAT | O_WRONLY, 0664);
-	while ((_read = read(_file1, buffer, 1024)) > 0)
-	{
-		if (_file2 < 0 || (write(_file2, buffer, _read) != _read))
+	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
+	if (ac != 3)
+		dprintf(SE, "Usage: cp file_from file_to\n"), exit(97);
+	input_fd = open(av[1], O_RDONLY);
+	if (input_fd == -1)
+		dprintf(SE, "Error: Can't read from file %s\n", av[1]), exit(98);
+	output_fd = open(av[2], O_CREAT | O_WRONLY | O_TRUNC, mode);
+	if (output_fd == -1)
+		dprintf(SE, "Error: Can't write to %s\n", av[2]), exit(99);
+
+	do {
+		istatus = read(input_fd, buf, MAXSIZE);
+		if (istatus == -1)
 		{
-			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]), exit(99);
+			dprintf(SE, "Error: Can't read from file %s\n", av[1]);
+			exit(98);
 		}
-	}
-	if (_read < 0)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
-		exit(98);
-	}
-	c1 = close(_file1);
-	if (c1 < 0)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %i\n", _file1), exit(100);
-	}
-	c2 = close(_file2);
-	if (c2 < 0)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %i\n", _file2), exit(100);
-	}
+		if (istatus > 0)
+		{
+			ostatus = write(output_fd, buf, (ssize_t) istatus);
+			if (ostatus == -1)
+				dprintf(SE, "Error: Can't write to %s\n", av[2]), exit(99);
+		}
+	} while (istatus > 0);
+
+	istatus = close(input_fd);
+	if (istatus == -1)
+		dprintf(SE, "Error: Can't close fd %d\n", input_fd), exit(100);
+	ostatus = close(output_fd);
+	if (ostatus == -1)
+		dprintf(SE, "Error: Can't close fd %d\n", output_fd), exit(100);
+
 	return (0);
 }
