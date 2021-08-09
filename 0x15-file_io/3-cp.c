@@ -1,49 +1,58 @@
-#include "main.h"
+#include "holberton.h"
 
 /**
- * main - copies the content of a file to another file
+ * main - copy the content of file to another file
  * @argc: argument count
- * @argv: argument vector
- * Return: 0 if success
+ * @argv: argument variable
+ * Return: 0 on success
  */
 
-int main(int ac, char *av[])
+int main(int argc, char *argv[])
 {
-	int input_fd, output_fd, istatus, ostatus;
-	char buf[MAXSIZE];
-	mode_t mode;
-
-	mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
-	if (ac != 3)
-		dprintf(SE, "Usage: cp file_from file_to\n"), exit(97);
-	input_fd = open(av[1], O_RDONLY);
-	if (input_fd == -1)
-		dprintf(SE, "Error: Can't read from file %s\n", av[1]), exit(98);
-	output_fd = open(av[2], O_CREAT | O_WRONLY | O_TRUNC, mode);
-	if (output_fd == -1)
-		dprintf(SE, "Error: Can't write to %s\n", av[2]), exit(99);
-
-	do {
-		istatus = read(input_fd, buf, MAXSIZE);
-		if (istatus == -1)
-		{
-			dprintf(SE, "Error: Can't read from file %s\n", av[1]);
-			exit(98);
-		}
-		if (istatus > 0)
-		{
-			ostatus = write(output_fd, buf, (ssize_t) istatus);
-			if (ostatus == -1)
-				dprintf(SE, "Error: Can't write to %s\n", av[2]), exit(99);
-		}
-	} while (istatus > 0);
-
-	istatus = close(input_fd);
-	if (istatus == -1)
-		dprintf(SE, "Error: Can't close fd %d\n", input_fd), exit(100);
-	ostatus = close(output_fd);
-	if (ostatus == -1)
-		dprintf(SE, "Error: Can't close fd %d\n", output_fd), exit(100);
-
-	return (0);
+int dest1, dest2, w;
+ssize_t size = 1024;
+char buffer[1024];
+if (argc != 3)
+{
+dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
+exit(97);
+}
+dest1 = open(argv[1], O_RDONLY);
+if (dest1 == -1)
+{
+dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
+exit(98);
+}
+dest2 = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0664);
+if (dest2 == -1)
+{
+dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
+exit(99);
+}
+while (size == 1024)
+{
+size = read(dest1, buffer, 1024);
+if (size == -1)
+{
+dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
+exit(98);
+}
+w = write(dest2, buffer, size);
+if (w == -1)
+{
+dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
+exit(99);
+}
+}
+if (close(dest1) == -1)
+{
+dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", dest1);
+exit(100);
+}
+if (close(dest2) == -1)
+{
+dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", dest2);
+exit(100);
+}
+return (0);
 }
